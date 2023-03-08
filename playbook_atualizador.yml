@@ -1,0 +1,28 @@
+- name: Playbook que trata parada/subida de aplicações para atualizar o SO
+  hosts: "{{ lista_hosts }}"
+  gather_facts: False
+  become: True
+  vars_files:
+    - lista_servidores.yml
+  tasks:
+    - name: Para o serviço da(s) máquina(s) em questão
+      vars:
+        instrucao: para
+      include_role:
+        name: manuseia_servico
+
+    - name: Executa a atualização de SO 
+      include_role:
+        name: atualiza_so
+
+    - name: Sobe o serviço da(s) máquina(s) em questão
+      vars:
+        instrucao: sobe
+      include_role:
+        name: manuseia_servico
+
+    - name: Valida o serviço da(s) máquina(s) em questão
+      vars:
+        instrucao: valida
+      include_role:
+        name: manuseia_servico
